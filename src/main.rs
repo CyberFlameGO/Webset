@@ -28,6 +28,8 @@ fn handle_connection(mut stream: TcpStream) {
         stream.write(response.as_bytes()).unwrap();
         stream.flush().unwrap();
     } else {
+        let status_line = "HTTP/1.1 404 NOT FOUND\r\n\r\n";
+        let mut file = File::open("404.html").unwrap();
         
     }
 }   
