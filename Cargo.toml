@@ -1,0 +1,6 @@
+[package]
+name = "Weset"
+version = "0.1.0"
+authors = ["George <george.marr.cobc@gmail.com>"]
+
+[dependencies]
