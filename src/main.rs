@@ -12,9 +12,9 @@ fn main() {
 
    for _stream in listener.incoming() {
        let stream = _stream.unwrap();
-       thread::spawn(|| {
-           handle_connection(stream);
-       });
+      ThreadPool::spawn(|| {
+          handle_connection(stream);
+      })
    }
 }
 
