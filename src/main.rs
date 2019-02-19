@@ -4,6 +4,7 @@ use std::io::prelude::*;
 use std::fs::File;
 use std::time::Duration;
 use std::thread;
+use std::thread::JoinHandle;
 
 fn main() {
    let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
@@ -20,9 +21,20 @@ pub struct ThreadPool;
 
 impl ThreadPool {
     pub fn new(size: usize) -> ThreadPool {
+        assert!(size > 0);
         ThreadPool
     }
+
+    pub fn spawn<F, T>(f: F) -> JoinHandle<T>
+        where
+            F: FnOnce() -> T + Send + 'static,
+            T: Send + 'static
+
+    pub fn execute<F>(&self, f: F)
+        where
+            F: FnOnce() + Send + 'static
 }
+
 
 fn handle_connection(mut stream: TcpStream) {
     let mut buffer = [0; 512];
