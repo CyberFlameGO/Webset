@@ -5,6 +5,7 @@ use std::fs::File;
 use std::time::Duration;
 use std::thread;
 use std::thread::JoinHandle;
+use std::sync::mpsc;
 
 fn main() {
    let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
@@ -21,6 +22,8 @@ struct Worker {
     id: usize,
     thread: thread::JoinHandle<()>
 }
+
+struct Job;
 
 impl Worker {
     pub fn new(id: usize) -> Worker {
@@ -40,14 +43,17 @@ impl ThreadPool {
         assert!(size > 0);
 
         let mut threads = Vec::with_capacity(size);
+        let (sender, receiver) = mpsc::channel();
 
         for id  in 0..size {
             threads.push(Worker::new(id));
         }
         ThreadPool {
-            threads
+            threads,
+            sender
         }
     }
+
 
 
 
@@ -61,6 +67,24 @@ impl ThreadPool {
             F: FnOnce() + Send + 'static
 }
 
+type Job = Box<FnOnce() + Send + 'static>;
+
+impl Worker {
+    fn new(id: usize, receiver: mpsc::Receiver<Job>) -> Worker {
+        let thread = thread::spawn(|| {
+            receiver;
+
+            loop {
+
+            }
+        });
+
+        Worker {
+            id,
+            thread
+        }
+    }
+}
 
 fn handle_connection(mut stream: TcpStream) {
     let mut buffer = [0; 512];
