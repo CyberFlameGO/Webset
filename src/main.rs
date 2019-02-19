@@ -17,13 +17,29 @@ fn main() {
    }
 }
 
+pub struct Worker {
+    id: usize,
+    thread: thread::JoinHandle<()>
+}
+
+
 pub struct ThreadPool;
 
 impl ThreadPool {
-    pub fn new(size: usize) -> ThreadPool {
+    pub fn new(size: usize) -> Result<ThreadPool, PoolCreationError> {
         assert!(size > 0);
-        ThreadPool
+
+        let mut threads = Vec::with_capacity(size);
+
+        for _  in 0..size {
+
+        }
+        ThreadPool {
+            threads
+        }
     }
+
+
 
     pub fn spawn<F, T>(f: F) -> JoinHandle<T>
         where
