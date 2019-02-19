@@ -10,8 +10,9 @@ fn main() {
 
    for _stream in listener.incoming() {
        let stream = _stream.unwrap();
-       print!("Connection made...");
-       handle_connection(stream);
+       thread::spawn(|| {
+           handle_connection(stream);
+       });
    }
 }
 
