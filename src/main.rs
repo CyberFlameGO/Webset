@@ -18,8 +18,9 @@ fn handle_connection(mut stream: TcpStream) {
     stream.read(&mut buffer).unwrap();
 
     let get = b"GET / HTTP/1.1\r\n";
+    let sleep = b"GET /sleep HTTP/1.1\r\n";
 
-    if buffer.starts_with(get){
+    let (status_line, filename) = if buffer.starts_with(get){
         let mut file = File::open("test.html").unwrap();
         let mut contents = String::new();
         file.read_to_string(&mut contents).unwrap();
