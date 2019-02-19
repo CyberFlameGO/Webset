@@ -17,11 +17,21 @@ fn main() {
    }
 }
 
-pub struct Worker {
+struct Worker {
     id: usize,
     thread: thread::JoinHandle<()>
 }
 
+impl Worker {
+    pub fn new(id: usize) -> Worker {
+        let thread = thread::spawn(|| {
+           Worker {
+               id,
+               thread
+           }
+        });
+    }
+}
 
 pub struct ThreadPool;
 
@@ -31,8 +41,8 @@ impl ThreadPool {
 
         let mut threads = Vec::with_capacity(size);
 
-        for _  in 0..size {
-
+        for id  in 0..size {
+            threads.push(Worker::new(id));
         }
         ThreadPool {
             threads
