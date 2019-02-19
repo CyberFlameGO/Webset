@@ -54,17 +54,20 @@ impl ThreadPool {
         }
     }
 
-
-
-
     pub fn spawn<F, T>(f: F) -> JoinHandle<T>
         where
             F: FnOnce() -> T + Send + 'static,
             T: Send + 'static
+    {}
 
     pub fn execute<F>(&self, f: F)
         where
             F: FnOnce() + Send + 'static
+
+    {
+        let job = Box::new(f);
+        self.sender.send(job).unwrap();
+    }
 }
 
 type Job = Box<FnOnce() + Send + 'static>;
