@@ -16,6 +16,14 @@ fn main() {
    }
 }
 
+pub struct ThreadPool;
+
+impl ThreadPool {
+    pub fn new(size: usize) -> ThreadPool {
+        ThreadPool
+    }
+}
+
 fn handle_connection(mut stream: TcpStream) {
     let mut buffer = [0; 512];
     stream.read(&mut buffer).unwrap();
