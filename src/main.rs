@@ -78,7 +78,9 @@ impl Worker {
             receiver;
 
             loop {
-
+                let job = receiver.lock().unwrap().recv().unwrap();
+                println!("Worker has received {} job now executing...", id);
+                job.call_box();
             }
         });
 
